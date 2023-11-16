@@ -1,13 +1,10 @@
 package com.reaksmeyarun.music_app.presentation.permission
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.reaksmeyarun.music_app.core.csv.EPermissionStatus
-import com.reaksmeyarun.music_app.core.csv.RuntimePermissionModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,91 +23,67 @@ class PermissionViewModel @Inject constructor(
     private val _state = MutableStateFlow(savedStateHandle[State] ?: PermissionState())
     val state = _state.asStateFlow()
 
-    private val _uiEvent = Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
-
-    private val readStoragePermission by lazy {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            Manifest.permission.READ_MEDIA_AUDIO
-        else
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    }
-    private val notificationPermission by lazy {
-        Manifest.permission.POST_NOTIFICATIONS
-    }
-
-    init {
-        _state.update { state ->
-            state.copy(
-                notification = RuntimePermissionModel(
-                    permission = notificationPermission
-                ),
-                readStorage = RuntimePermissionModel(
-                    permission = readStoragePermission
-                )
-            )
-        }
-    }
+    private val _event = Channel<Event>()
+    val event = _event.receiveAsFlow()
 
     fun onEvent(event: PermissionEvent) {
+
         viewModelScope.launch {
             when (event) {
-                is PermissionEvent.CheckNotificationPermission -> _state.update { state ->
-                    state.copy(
-                        notification = state.notification.copy(status = event.status)
-                    )
-                }
-
-                is PermissionEvent.CheckReadStoragePermission -> _state.update { state ->
-                    state.copy(
-                        readStorage = state.readStorage.copy(status = event.status)
-                    )
-                }
-
-                PermissionEvent.DismissRationaleDialog -> _state.update { state ->
-                    state.copy(
-                        readStorage = state.readStorage.copy(isRationale = false),
-                        notification = state.notification.copy(isRationale = false)
-                    )
-                }
-
-                PermissionEvent.RequestNotificationPermission ->
-                    if (state.value.notification.status == EPermissionStatus.PermissionDenied)
-                        _state.update { state ->
-                            state.copy(notification = state.notification.copy(isRationale = true))
-                        }
-                    else
-                        _uiEvent.send(UiEvent.RequestNotificationPermission)
-
-                PermissionEvent.RequestReadStoragePermission ->
-                    if (state.value.readStorage.status == EPermissionStatus.PermissionDenied)
-                        _state.update { state ->
-                            state.copy(readStorage = state.readStorage.copy(isRationale = true))
-                        }
-                    else
-                        _uiEvent.send(UiEvent.RequestReadStoragePermission)
-
+                is PermissionEvent.CheckNotificationPermission -> updatePermissionNotification(event.status)
+                is PermissionEvent.CheckReadStoragePermission -> updatePermissionReadStorage(event.status)
+                PermissionEvent.DismissRationaleDialog -> dismissRationaleDialog()
+                PermissionEvent.RequestNotificationPermission -> requestPermissionNotification()
+                PermissionEvent.RequestReadStoragePermission -> requestPermissionReadStorage()
                 PermissionEvent.GoToSetting -> {
-                    _state.update { state ->
-                        state.copy(
-                            readStorage = state.readStorage.copy(isRationale = false),
-                            notification = state.notification.copy(isRationale = false)
-                        )
-                    }
-                    _uiEvent.send(UiEvent.GoToSetting)
+                    dismissRationaleDialog()
+                    sendUiEvent(Event.GoToSetting)
                 }
             }
         }
         savedStateHandle[State] = _state.value
     }
 
-    sealed class UiEvent {
+    private suspend fun requestPermissionNotification() = if (state.value.notification.isPermissionDenied())
+        _state.update { state ->
+            state.copy(notification = state.notification.copy(isRationale = true))
+        }
+    else
+        sendUiEvent(Event.RequestNotification)
 
-        object RequestNotificationPermission : UiEvent()
+    private suspend fun requestPermissionReadStorage() = if (state.value.readStorage.isPermissionDenied())
+        _state.update { state ->
+            state.copy(readStorage = state.readStorage.copy(isRationale = true))
+        }
+    else
+        sendUiEvent(Event.RequestReadStorage)
 
-        object RequestReadStoragePermission : UiEvent()
+    private fun updatePermissionNotification(status: EPermissionStatus) = _state.update { state ->
+        state.copy(notification = state.notification.copy(status = status))
+    }
 
-        object GoToSetting : UiEvent()
+    private fun updatePermissionReadStorage(status: EPermissionStatus) = _state.update { state ->
+        state.copy(readStorage = state.readStorage.copy(status = status))
+    }
+
+    private fun dismissRationaleDialog() = _state.update { state ->
+        state.copy(
+            readStorage = state.readStorage.copy(isRationale = false),
+            notification = state.notification.copy(isRationale = false)
+        )
+    }
+
+    private suspend fun sendUiEvent(event: Event) {
+        _event.send(event)
+    }
+
+    sealed class Event {
+
+        object GoToSetting : Event()
+
+        object RequestNotification : Event()
+
+        object RequestReadStorage : Event()
 
     }
 

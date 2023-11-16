@@ -1,17 +1,16 @@
 package com.reaksmeyarun.music_app.presentation.permission
 
-import android.Manifest
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import com.reaksmeyarun.music_app.core.csv.LifecycleObserver
-import com.reaksmeyarun.music_app.core.csv.TransparentSystemBars
-import com.reaksmeyarun.music_app.core.csv.checkPermissionEvent
+import com.reaksmeyarun.music_app.core.csv.checkPermissionStatus
+import com.reaksmeyarun.music_app.core.csv.notificationPermission
+import com.reaksmeyarun.music_app.core.csv.readMediaAudioPermission
 
 @Composable
 fun PermissionRoute(
@@ -23,25 +22,20 @@ fun PermissionRoute(
     PermissionScreen(
         context = context,
         state = state,
-        uiEvent = viewModel.uiEvent,
+        event = viewModel.event,
         onEvent = viewModel::onEvent
     )
 }
-
 
 @Composable
 fun CheckRuntimePermission(context: Context, onEvent: (PermissionEvent) -> Unit) {
     LifecycleObserver(context) {
         if (it == Lifecycle.Event.ON_RESUME) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                val status = context.checkPermissionEvent(permission = Manifest.permission.POST_NOTIFICATIONS)
+                val status = context.checkPermissionStatus(notificationPermission)
                 onEvent(PermissionEvent.CheckNotificationPermission(status))
             }
-            val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                Manifest.permission.READ_MEDIA_AUDIO
-            else
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            val status = context.checkPermissionEvent(permission = permission)
+            val status = context.checkPermissionStatus(readMediaAudioPermission)
             onEvent(PermissionEvent.CheckReadStoragePermission(status))
         }
     }

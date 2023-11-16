@@ -21,7 +21,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.reaksmeyarun.music_app.R
-import com.reaksmeyarun.music_app.core.csv.ObserveFlow
+import com.reaksmeyarun.music_app.core.csv.ObserveEvent
 import com.reaksmeyarun.music_app.core.csv.TransparentSystemBars
 import com.reaksmeyarun.music_app.core.csv.painter
 import com.reaksmeyarun.music_app.ui.theme.MusicAppTheme
@@ -98,7 +98,7 @@ fun SplashScreen(
 
 @Composable
 fun ObserveState(viewModel: SplashViewModel, goToPermission: () -> Unit) {
-    ObserveFlow(
+    ObserveEvent(
         flow = viewModel.state,
         onEvent = {
             when (it) {

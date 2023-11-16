@@ -34,19 +34,19 @@ import com.reaksmeyarun.music_app.ui.theme.HolderBackground
 
 @Composable
 internal fun ComponentPermission(
-    runtimePermission: RuntimePermissionModel,
+    permission: RuntimePermissionModel,
     @DrawableRes
     res: Int,
     onClick: () -> Unit
 ) {
-    val status = runtimePermission.status
+    val status = permission.status
     val isEnable = when (status) {
         EPermissionStatus.PermissionNoGrant,
         EPermissionStatus.PermissionDenied -> true
 
         EPermissionStatus.PermissionGrant -> false
     }
-    val desc = when (runtimePermission.permission) {
+    val desc = when (permission.permission) {
         Manifest.permission.POST_NOTIFICATIONS -> stringResource(R.string.allow_music_app_to_send_you_notification)
         Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_MEDIA_AUDIO -> stringResource(
             R.string.allow_music_app_to_access_storage_on_your_device)
