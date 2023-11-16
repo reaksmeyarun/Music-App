@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Music App</string>
+
+    <string name="hide_password">Hide Password</string>
+    <string name="show_password">Show Password</string>
+
+    <string name="error">Error!</string>
+    <string name="sth_went_wrong">Something went wrong,Please try again later</string>
+    <string name="no_result">No Results</string>
+    <string name="no_result_search">Sorry, there are no results for this search. Please try another phrase</string>
+    <string name="no_internet">No Internet connection</string>
+    <string name="no_internet_desc">No Internet connection found. Check your connection or try again.</string>
+    <string name="empty_list_desc">All incoming requests will be listed in this folder</string>
+    <string name="empty">Empty!</string>
+    <string name="rationale_notification_title">Notification Permission is Require!</string>
+    <string name="rationale_notification_desc">To create and manage notifications on the device. It is not required specifically for accessing or working with MP3 files.</string>
+    <string name="rationale_read_storage_title">Storage Permission is Require!</string>
+    <string name="rationale_read_storage_desc">To access MP3 files because it grants your app the ability to read user data stored in the device\'s external storage.</string>
+    <string name="go_to_setting">Go to Setting</string>
+    <string name="n_a">N/A</string>
+    <string name="permissions">Permissions</string>
+    <string name="require">Require!</string>
+    <string name="notification_permission">" - Notification Permission:"</string>
+    <string name="music_app">Music App</string>
+    <string name="allows">" allows "</string>
+    <string name="to_create_and_manage_notifications_on_the_device_it_is_not_required_specifically_for_accessing_or_working_with_mp3_files">" to create and manage notifications on the device. It is not required specifically for accessing or working with MP3 files.\n"</string>
+    <string name="storage_permission">" - Storage Permission:"</string>
+    <string name="to_access_mp3_files_because_it_grants_your_app_the_ability_to_read_user_data_stored_in_the_device_s_external_storage">" to access MP3 files because it grants your app the ability to read user data stored in the device's external storage."</string>
+    <string name="note">Note:</string>
+    <string name="allow_music_app_to_access_storage_on_your_device">Allow Music App to access storage on your device.</string>
+    <string name="allow_music_app_to_send_you_notification">Allow Music App to send you \nnotification.</string>
+    <string name="setting">Setting</string>
+    <string name="language">Language</string>
+
+</resources>
