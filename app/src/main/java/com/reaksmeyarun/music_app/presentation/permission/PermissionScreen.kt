@@ -1,8 +1,8 @@
 package com.reaksmeyarun.music_app.presentation.permission
 
-import android.Manifest.*
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,11 +21,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.reaksmeyarun.music_app.R
-import com.reaksmeyarun.music_app.core.csv.ObserveFlow
+import com.reaksmeyarun.music_app.core.csv.ObserveEvent
+import com.reaksmeyarun.music_app.core.csv.notificationPermission
 import com.reaksmeyarun.music_app.core.csv.openAppSettings
 import com.reaksmeyarun.music_app.core.csv.painter
 import com.reaksmeyarun.music_app.core.csv.permissionNoteDescription
-import com.reaksmeyarun.music_app.core.csv.requestPermission
+import com.reaksmeyarun.music_app.core.csv.readMediaAudioPermission
+import com.reaksmeyarun.music_app.core.csv.requestPermissions
 import com.reaksmeyarun.music_app.core.presentation.component.HeaderText
 import com.reaksmeyarun.music_app.core.presentation.component.NormalText
 import com.reaksmeyarun.music_app.presentation.permission.component.ComponentPermission
@@ -42,8 +44,8 @@ fun PreviewPermissionScreen() {
         PermissionScreen(
             context = LocalContext.current,
             state = PermissionState(),
-            uiEvent = flow {
-                emit(PermissionViewModel.UiEvent.GoToSetting)
+            event = flow {
+                emit(PermissionViewModel.Event.GoToSetting)
             }
         ) {
 
@@ -55,10 +57,10 @@ fun PreviewPermissionScreen() {
 internal fun PermissionScreen(
     context: Context,
     state: PermissionState,
-    uiEvent: Flow<PermissionViewModel.UiEvent>,
+    event: Flow<PermissionViewModel.Event>,
     onEvent: (PermissionEvent) -> Unit
 ) {
-    ObserveUiEvent(context = context, uiEvent = uiEvent)
+    ObserveEvent(context = context, event = event)
     RationaleDialog(state = state.notification, onEvent = onEvent)
     RationaleDialog(state = state.readStorage, onEvent = onEvent)
     Box(
@@ -81,14 +83,14 @@ internal fun PermissionScreen(
             ) {
                 Spacer(modifier = Modifier.height(44.dp))
                 ComponentPermission(
-                    runtimePermission = state.notification,
+                    permission = state.notification,
                     res = R.drawable.ic_notification,
                     onClick = {
                         onEvent(PermissionEvent.RequestNotificationPermission)
                     }
                 )
                 ComponentPermission(
-                    runtimePermission = state.readStorage,
+                    permission = state.readStorage,
                     res = R.drawable.ic_folder,
                     onClick = {
                         onEvent(PermissionEvent.RequestReadStoragePermission)
@@ -113,22 +115,24 @@ internal fun PermissionScreen(
 }
 
 @Composable
-private fun ObserveUiEvent(context: Context, uiEvent: Flow<PermissionViewModel.UiEvent>) {
-    ObserveFlow(flow = uiEvent, onEvent = {
-        when (it) {
-            PermissionViewModel.UiEvent.RequestNotificationPermission -> 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    context.requestPermission(arrayOf(permission.POST_NOTIFICATIONS))
+private fun ObserveEvent(
+    context: Context,
+    event: Flow<PermissionViewModel.Event>
+) {
+    ObserveEvent(
+        flow = event,
+        onEvent = {
+            when (it) {
+                PermissionViewModel.Event.GoToSetting -> openAppSettings(context)
+                PermissionViewModel.Event.RequestNotification ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                        context.requestPermissions(arrayOf(notificationPermission))
 
-            PermissionViewModel.UiEvent.RequestReadStoragePermission -> {
-                val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    permission.READ_MEDIA_AUDIO
-                else
-                    permission.READ_EXTERNAL_STORAGE
-                context.requestPermission(arrayOf(permission))
+                PermissionViewModel.Event.RequestReadStorage -> {
+                    context.requestPermissions(arrayOf(readMediaAudioPermission))
+                    Log.e("TAG", "ObserveUiEvent: RequestReadStorage")
+                }
             }
-
-            PermissionViewModel.UiEvent.GoToSetting -> openAppSettings(context)
         }
-    })
+    )
 }

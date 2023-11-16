@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import kotlinx.parcelize.Parcelize
 import kotlin.random.Random
 
-fun Context.checkPermissionEvent(permission: String): EPermissionStatus {
+fun Context.checkPermissionStatus(permission: String): EPermissionStatus {
     val isPermissionGranted = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
     val status: EPermissionStatus = if (isPermissionGranted)
         EPermissionStatus.PermissionGrant
@@ -24,7 +24,7 @@ fun Context.checkPermissionEvent(permission: String): EPermissionStatus {
     return status
 }
 
-fun Context.requestPermission(permissions: Array<String>) =
+fun Context.requestPermissions(permissions: Array<String>) =
     ActivityCompat.requestPermissions(
         /* activity = */ this as Activity,
         /* permissions = */ permissions,
@@ -42,4 +42,10 @@ data class RuntimePermissionModel(
     var permission: String? = null,
     var isRationale: Boolean = false,
     var status: EPermissionStatus = EPermissionStatus.PermissionNoGrant
-) : Parcelable
+) : Parcelable {
+
+    fun isPermissionDenied() = status == EPermissionStatus.PermissionDenied
+    fun isPermissionNoGrant() = status == EPermissionStatus.PermissionNoGrant
+    fun isPermissionGrant() = status == EPermissionStatus.PermissionGrant
+
+}
