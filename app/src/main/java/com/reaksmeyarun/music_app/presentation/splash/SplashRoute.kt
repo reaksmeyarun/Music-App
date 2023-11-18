@@ -2,25 +2,17 @@ package com.reaksmeyarun.music_app.presentation.splash
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import com.reaksmeyarun.music_app.core.csv.navigateTo
-import com.reaksmeyarun.music_app.navigation.Route
+import com.reaksmeyarun.music_app.core.csv.TransparentSystemBars
 
 @Composable
 fun SplashScreenRoute(
-    navHostController: NavHostController
+    navigateToPermissionScreen: () -> Unit,
+    navigateToHomeScreen: () -> Unit,
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
-
-    val viewModel: SplashViewModel = hiltViewModel()
-
+    TransparentSystemBars(false)
     SplashScreen(
         viewModel = viewModel,
-        goToPermission = {
-            navHostController.navigateTo(
-                route = Route.PermissionScreen.name,
-                popUpRoute = Route.SlashScreen.name,
-                inclusive = true
-            )
-        }
+        navigateToPermissionScreen = navigateToPermissionScreen
     )
 }

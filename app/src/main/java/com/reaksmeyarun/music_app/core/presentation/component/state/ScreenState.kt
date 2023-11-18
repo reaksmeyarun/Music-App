@@ -16,9 +16,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.reaksmeyarun.music_app.core.presentation.component.Button
-import com.reaksmeyarun.music_app.core.presentation.component.HeaderText
-import com.reaksmeyarun.music_app.core.presentation.component.NormalText
+import com.reaksmeyarun.music_app.core.presentation.component.button.ButtonModifier
+import com.reaksmeyarun.music_app.core.presentation.component.button.ButtonComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.Header5TextModifier
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextModifier
 
 @Composable
 fun ScreenState(
@@ -28,9 +30,11 @@ fun ScreenState(
     tryAgainState: MutableState<Boolean>,
     tryAgainClick: () -> Unit = {}
 ) {
-    Surface(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -47,34 +51,42 @@ fun ScreenState(
                     }
                     .fillMaxWidth(0.7f)
                     .aspectRatio(1f))
-            HeaderText(text = title,
-                textAlign = TextAlign.Center,
+            TextComponent(
+                text = title,
+                textModifier = Header5TextModifier()
+                    .textAlign(textAlign = TextAlign.Center),
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .constrainAs(headerRefs) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         top.linkTo(imageRefs.bottom)
-                    })
-            NormalText(text = description,
-                textAlign = TextAlign.Center,
+                    }
+            )
+            TextComponent(
+                text = description,
+                textModifier = TextModifier()
+                    .textAlign(textAlign = TextAlign.Center),
                 modifier = Modifier
                     .padding(vertical = 8.dp, horizontal = 24.dp)
                     .constrainAs(descriptionRefs) {
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         top.linkTo(headerRefs.bottom)
-                    })
+                    }
+            )
             if (tryAgainState.value)
-                Button(
+                ButtonComponent(
                     value = "Try Again",
+                    buttonModifier = ButtonModifier(),
                     modifier = Modifier
                         .padding(vertical = 8.dp, horizontal = 24.dp)
                         .constrainAs(tryAgainRefs) {
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             top.linkTo(descriptionRefs.bottom)
-                        },
+                        }
+                    ,
                     onClick = tryAgainClick
                 )
         }

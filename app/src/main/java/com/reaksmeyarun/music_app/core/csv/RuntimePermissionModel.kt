@@ -24,6 +24,13 @@ fun Context.checkPermissionStatus(permission: String): EPermissionStatus {
     return status
 }
 
+fun Context.requestPermission(permissions: String) =
+    ActivityCompat.requestPermissions(
+        /* activity = */ this as Activity,
+        /* permissions = */ arrayOf(permissions),
+        /* requestCode = */ Random.nextInt(1, 100)
+    )
+
 fun Context.requestPermissions(permissions: Array<String>) =
     ActivityCompat.requestPermissions(
         /* activity = */ this as Activity,

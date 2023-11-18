@@ -14,7 +14,8 @@ val Primary = Color(0xFFCCC2DC)
 val Secondary = Color(0xFFD0BCFF)
 
 val White = Color(0xFFFFFFFF)
-val TextColor = Color(0xFF000000)
+val TextColor = Color(0xFFFFFFFF)
+val ButtonTextColor = Color(0xFF000000)
 val SubTextColor = Color(0xCC000000)
 val HintColor = Color(0x80000000)
 

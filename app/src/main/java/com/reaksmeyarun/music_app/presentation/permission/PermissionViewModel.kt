@@ -17,21 +17,20 @@ import javax.inject.Inject
 @SuppressLint("InlinedApi")
 @HiltViewModel
 class PermissionViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle
+    private val savedState: SavedStateHandle
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(savedStateHandle[State] ?: PermissionState())
+    private val _state = MutableStateFlow(value = savedState[State] ?: PermissionState())
     val state = _state.asStateFlow()
 
     private val _event = Channel<Event>()
     val event = _event.receiveAsFlow()
 
     fun onEvent(event: PermissionEvent) {
-
         viewModelScope.launch {
             when (event) {
-                is PermissionEvent.CheckNotificationPermission -> updatePermissionNotification(event.status)
-                is PermissionEvent.CheckReadStoragePermission -> updatePermissionReadStorage(event.status)
+                is PermissionEvent.UpdateNotificationPermission -> updatePermissionNotification(event.status)
+                is PermissionEvent.UpdateReadMediaPermission -> updatePermissionReadStorage(event.status)
                 PermissionEvent.DismissRationaleDialog -> dismissRationaleDialog()
                 PermissionEvent.RequestNotificationPermission -> requestPermissionNotification()
                 PermissionEvent.RequestReadStoragePermission -> requestPermissionReadStorage()
@@ -40,35 +39,37 @@ class PermissionViewModel @Inject constructor(
                     sendUiEvent(Event.GoToSetting)
                 }
             }
+            savedState[State] = _state.value
         }
-        savedStateHandle[State] = _state.value
     }
 
-    private suspend fun requestPermissionNotification() = if (state.value.notification.isPermissionDenied())
-        _state.update { state ->
-            state.copy(notification = state.notification.copy(isRationale = true))
-        }
-    else
-        sendUiEvent(Event.RequestNotification)
+    private suspend fun requestPermissionNotification() =
+        if (state.value.notification.isPermissionDenied())
+            _state.update { state ->
+                state.copy(notification = state.notification.copy(isRationale = true))
+            }
+        else
+            sendUiEvent(Event.RequestNotification)
 
-    private suspend fun requestPermissionReadStorage() = if (state.value.readStorage.isPermissionDenied())
-        _state.update { state ->
-            state.copy(readStorage = state.readStorage.copy(isRationale = true))
-        }
-    else
-        sendUiEvent(Event.RequestReadStorage)
+    private suspend fun requestPermissionReadStorage() =
+        if (state.value.readMedia.isPermissionDenied())
+            _state.update { state ->
+                state.copy(readMedia = state.readMedia.copy(isRationale = true))
+            }
+        else
+            sendUiEvent(Event.RequestReadStorage)
 
     private fun updatePermissionNotification(status: EPermissionStatus) = _state.update { state ->
         state.copy(notification = state.notification.copy(status = status))
     }
 
     private fun updatePermissionReadStorage(status: EPermissionStatus) = _state.update { state ->
-        state.copy(readStorage = state.readStorage.copy(status = status))
+        state.copy(readMedia = state.readMedia.copy(status = status))
     }
 
     private fun dismissRationaleDialog() = _state.update { state ->
         state.copy(
-            readStorage = state.readStorage.copy(isRationale = false),
+            readMedia = state.readMedia.copy(isRationale = false),
             notification = state.notification.copy(isRationale = false)
         )
     }
@@ -84,6 +85,8 @@ class PermissionViewModel @Inject constructor(
         object RequestNotification : Event()
 
         object RequestReadStorage : Event()
+
+        object NavigateToSettingScreen : Event()
 
     }
 

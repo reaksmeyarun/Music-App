@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -24,20 +23,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.reaksmeyarun.music_app.core.presentation.component.Button
-import com.reaksmeyarun.music_app.core.presentation.component.HeaderText
-import com.reaksmeyarun.music_app.core.presentation.component.NormalText
+import com.reaksmeyarun.music_app.core.presentation.component.button.ButtonModifier
+import com.reaksmeyarun.music_app.core.presentation.component.button.ButtonComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.Header5TextModifier
+import com.reaksmeyarun.music_app.core.presentation.component.text.SmallTextModifier
 import com.reaksmeyarun.music_app.ui.theme.MusicAppTheme
-import com.reaksmeyarun.music_app.ui.theme.Primary
-import com.reaksmeyarun.music_app.ui.theme.SubTextColor
 
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewAlertDialog() {
     MusicAppTheme {
-        AlertDialog(title = "Alert Dialog", desc = "JetWeatherForecastTheme", state = remember {
+        AlertDialog(title = "Alert Dialog", desc = "JetWeatherForecastTheme JetWeatherForecastTheme JetWeatherForecastTheme JetWeatherForecastTheme JetWeatherForecastTheme", state = remember {
             mutableStateOf(true)
         })
     }
@@ -67,30 +65,31 @@ fun AlertDialog(
                     .wrapContentWidth()
                     .wrapContentHeight()
             ) {
-                HeaderText(
+                TextComponent(
                     text = title,
-                    color = Color.White
+                    textModifier = Header5TextModifier()
+                        .color(Color.White)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                NormalText(
+                TextComponent(
                     text = desc,
-                    textSize = 12.sp,
-                    color = Color.White
+                    textModifier = SmallTextModifier()
+                        .color(Color.White)
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Button(
+                    ButtonComponent(
                         value = "Close",
-                        textColor = Color.White,
-                        contentPaddingHorizontal = 8.dp,
-                        buttonColors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent
-                        )
-                    ) {
-                        state.value = false
-                    }
+                        buttonModifier = ButtonModifier()
+                            .textColor(Color.White)
+                            .buttonColors(Color.Transparent)
+                            .contentPaddingHorizontal(8.dp),
+                        onClick = {
+                            state.value = false
+                        }
+                    )
                 }
             }
         }
