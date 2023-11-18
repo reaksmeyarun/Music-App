@@ -14,9 +14,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.reaksmeyarun.music_app.R
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.Header5TextModifier
 import com.reaksmeyarun.music_app.ui.theme.MusicAppTheme
-import com.reaksmeyarun.music_app.ui.theme.TextColor
-import com.reaksmeyarun.music_app.ui.theme.White
 
 @Preview(showBackground = true)
 @Composable
@@ -43,11 +43,14 @@ fun Toolbar(
             end = 0.dp,
             bottom = 0.dp
         ), title = {
-            HeaderText(
+            TextComponent(
                 text = title,
-                color = White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(end = 40.dp)
+                textModifier = Header5TextModifier()
+                    .color(color = Color.White)
+                    .textAlign(textAlign = TextAlign.Center),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 40.dp)
             )
         }, navigationIcon = {
             if (enableBackPress)

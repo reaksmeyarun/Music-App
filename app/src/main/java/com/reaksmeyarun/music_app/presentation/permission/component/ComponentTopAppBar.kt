@@ -12,12 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.reaksmeyarun.music_app.R
 import com.reaksmeyarun.music_app.core.presentation.component.IconButton
-import com.reaksmeyarun.music_app.core.presentation.component.NormalText
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.Header3TextModifier
+import com.reaksmeyarun.music_app.core.presentation.component.text.Header5TextModifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,12 +35,12 @@ internal fun ComponentTopAppBar() {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    NormalText(
-                        fontWeight = FontWeight.Bold,
-                        textSize = 32.sp,
+                    TextComponent(
                         text = stringResource(R.string.permissions),
-                        color = Color.White,
-                        modifier = Modifier.weight(weight = 1f, fill = true)
+                        textModifier = Header5TextModifier()
+                            .textSize(32.sp),
+                        modifier = Modifier
+                            .weight(weight = 1f, fill = true)
                     )
                     IconButton(
                         res = R.drawable.ic_setting,
@@ -48,11 +50,9 @@ internal fun ComponentTopAppBar() {
                         }
                     )
                 }
-                NormalText(
-                    fontWeight = FontWeight.Bold,
-                    textSize = 16.sp,
+                TextComponent(
                     text = stringResource(R.string.require),
-                    color = Color.White
+                    textModifier = Header3TextModifier()
                 )
             }
         },
@@ -61,4 +61,10 @@ internal fun ComponentTopAppBar() {
             titleContentColor = Color.Transparent,
         )
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewTopAppBar() {
+    ComponentTopAppBar()
 }

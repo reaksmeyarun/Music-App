@@ -19,17 +19,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.reaksmeyarun.music_app.R
 import com.reaksmeyarun.music_app.core.csv.EPermissionStatus
 import com.reaksmeyarun.music_app.core.csv.RuntimePermissionModel
 import com.reaksmeyarun.music_app.core.csv.painter
 import com.reaksmeyarun.music_app.core.csv.specificBold
-import com.reaksmeyarun.music_app.core.presentation.component.NormalText
+import com.reaksmeyarun.music_app.core.presentation.component.text.Body1TextModifier
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.SmallTextModifier
 import com.reaksmeyarun.music_app.ui.theme.HolderBackground
 
 @Composable
@@ -49,7 +49,9 @@ internal fun ComponentPermission(
     val desc = when (permission.permission) {
         Manifest.permission.POST_NOTIFICATIONS -> stringResource(R.string.allow_music_app_to_send_you_notification)
         Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_MEDIA_AUDIO -> stringResource(
-            R.string.allow_music_app_to_access_storage_on_your_device)
+            R.string.allow_music_app_to_access_storage_on_your_device
+        )
+
         else -> stringResource(R.string.n_a)
     }
     Column(
@@ -69,15 +71,13 @@ internal fun ComponentPermission(
                 contentDescription = null,
                 modifier = Modifier.size(24.dp)
             )
-            NormalText(
-                textSize = 14.sp,
+            TextComponent(
                 text = specificBold(
                     originalValue = desc,
                     value = stringResource(id = R.string.music_app)
                 ),
-                textAlign = TextAlign.Start,
-                minLines = 2,
-                color = Color.White,
+                textModifier = Body1TextModifier()
+                    .minLines(2),
                 modifier = Modifier
                     .padding(start = 24.dp, end = 24.dp)
                     .weight(weight = 1f, fill = true)
@@ -97,11 +97,10 @@ internal fun ComponentPermission(
             Spacer(modifier = Modifier.width(24.dp))
         }
         Spacer(modifier = Modifier.height(8.dp))
-        NormalText(
-            textSize = 12.sp,
+        TextComponent(
             text = status.message,
-            color = Color.White,
-            textAlign = TextAlign.Center,
+            textModifier = SmallTextModifier()
+                .alignCenter(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 24.dp, end = 24.dp)
@@ -110,5 +109,13 @@ internal fun ComponentPermission(
                 .padding(vertical = 6.dp)
         )
         Spacer(modifier = Modifier.height(12.dp))
+    }
+}
+
+@Preview
+@Composable
+fun PreviewComponentPermission() {
+    ComponentPermission(permission = RuntimePermissionModel(), res = R.drawable.ic_notification) {
+        
     }
 }

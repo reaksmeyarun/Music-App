@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -20,11 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import com.reaksmeyarun.music_app.core.presentation.component.Button
-import com.reaksmeyarun.music_app.core.presentation.component.HeaderText
-import com.reaksmeyarun.music_app.core.presentation.component.NormalText
+import com.reaksmeyarun.music_app.core.presentation.component.button.ButtonModifier
+import com.reaksmeyarun.music_app.core.presentation.component.button.ButtonComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.Header5TextModifier
+import com.reaksmeyarun.music_app.core.presentation.component.text.SmallTextModifier
 import com.reaksmeyarun.music_app.ui.theme.MusicAppTheme
 
 @Preview(showBackground = true)
@@ -78,40 +78,43 @@ fun ConfirmDialog(
                         .fillMaxWidth()
                         .wrapContentHeight()
                 ) {
-                    HeaderText(
+                    TextComponent(
                         text = title,
-                        color = Color.White
+                        textModifier = Header5TextModifier()
+                            .color(Color.White)
                     )
                     Spacer(modifier = Modifier.height(24.dp))
-                    NormalText(
-                        text = desc, textSize = 12.sp, color = Color.White
+                    TextComponent(
+                        text = desc,
+                        textModifier = SmallTextModifier()
+                            .color(Color.White)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
-                        Button(
+                        ButtonComponent(
                             value = textCancel,
-                            textColor = Color.White,
-                            contentPaddingHorizontal = 8.dp,
-                            buttonColors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Transparent
-                            )
-                        ) {
-                            eventListener.invoke(EDialogStatus.No)
-                        }
+                            buttonModifier = ButtonModifier()
+                                .textColor(Color.White)
+                                .buttonColors(Color.Transparent)
+                                .contentPaddingHorizontal(8.dp),
+                            onClick = {
+                                eventListener.invoke(EDialogStatus.No)
+                            }
+                        )
                         Spacer(modifier = Modifier.width(16.dp))
-                        Button(
+                        ButtonComponent(
                             value = textConfirm,
-                            textColor = Color.White,
-                            contentPaddingHorizontal = 8.dp,
-                            buttonColors = ButtonDefaults.buttonColors(
-                                containerColor = Color.Transparent
-                            )
-                        ) {
-                            eventListener.invoke(EDialogStatus.Yes)
-                        }
+                            buttonModifier = ButtonModifier()
+                                .textColor(Color.White)
+                                .buttonColors(Color.Transparent)
+                                .contentPaddingHorizontal(8.dp),
+                            onClick = {
+                                eventListener.invoke(EDialogStatus.Yes)
+                            }
+                        )
                     }
                 }
             }

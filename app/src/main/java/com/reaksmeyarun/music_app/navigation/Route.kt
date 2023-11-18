@@ -4,4 +4,5 @@ enum class Route {
     SlashScreen,
     PermissionScreen,
     SettingScreen,
+    HomeScreen,
 }

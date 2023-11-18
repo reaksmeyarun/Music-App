@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.reaksmeyarun.music_app.R
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
 import com.reaksmeyarun.music_app.ui.theme.Primary
 import com.reaksmeyarun.music_app.ui.theme.Secondary
 
@@ -112,7 +113,7 @@ fun OutlinedTextField(
             }
         },
         label = {
-            NormalText(text = labelValue)
+            TextComponent(text = labelValue)
         },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         visualTransformation = when (keyboardType) {

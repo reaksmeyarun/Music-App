@@ -7,24 +7,31 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.reaksmeyarun.music_app.core.csv.TransparentSystemBars
 import com.reaksmeyarun.music_app.presentation.permission.PermissionRoute
+import com.reaksmeyarun.music_app.presentation.permission.PermissionScreenRoute
+import com.reaksmeyarun.music_app.presentation.permission.navigateToSettingScreen
 import com.reaksmeyarun.music_app.presentation.setting.SettingScreen
 import com.reaksmeyarun.music_app.presentation.splash.SplashScreenRoute
+import com.reaksmeyarun.music_app.presentation.splash.navigateToHomeScreen
+import com.reaksmeyarun.music_app.presentation.splash.navigateToPermissionScreen
 
 @Composable
 fun AppNavigation() {
-    val navHostController = rememberNavController()
+    val navController = rememberNavController()
     val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current
     NavHost(
-        navController = navHostController,
-        startDestination = Route.SlashScreen.name
+        navController = navController,
+        startDestination = SplashScreenRoute
     ) {
-        composable(Route.SlashScreen.name) {
-            TransparentSystemBars(false)
-            SplashScreenRoute(navHostController = navHostController)
+        composable(SplashScreenRoute) {
+            SplashScreenRoute(
+                navigateToPermissionScreen = navController::navigateToPermissionScreen,
+                navigateToHomeScreen = navController::navigateToHomeScreen
+            )
         }
-        composable(Route.PermissionScreen.name) {
-            TransparentSystemBars(false)
-            PermissionRoute()
+        composable(PermissionScreenRoute) {
+            PermissionRoute(
+                navigateToSettingScreen = navController::navigateToSettingScreen
+            )
         }
         composable(Route.SettingScreen.name) {
             TransparentSystemBars(false)

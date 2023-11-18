@@ -40,10 +40,9 @@ fun PreviewSplashScreen() {
 @Composable
 fun SplashScreen(
     viewModel: SplashViewModel,
-    goToPermission: () -> Unit
+    navigateToPermissionScreen: () -> Unit
 ) {
-    TransparentSystemBars(false)
-    ObserveState(viewModel = viewModel, goToPermission = goToPermission)
+    ObserveState(viewModel = viewModel, goToPermission = navigateToPermissionScreen)
     val composition by rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(R.raw.ios_white_loading)
     )

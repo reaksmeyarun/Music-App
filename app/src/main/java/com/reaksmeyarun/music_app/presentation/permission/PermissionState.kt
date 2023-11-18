@@ -9,5 +9,5 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PermissionState(
     val notification: RuntimePermissionModel = RuntimePermissionModel(permission = notificationPermission),
-    val readStorage: RuntimePermissionModel = RuntimePermissionModel(permission = readMediaAudioPermission)
+    val readMedia: RuntimePermissionModel = RuntimePermissionModel(permission = readMediaAudioPermission)
 ) : Parcelable

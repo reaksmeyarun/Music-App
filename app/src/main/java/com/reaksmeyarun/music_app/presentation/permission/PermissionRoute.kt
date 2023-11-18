@@ -8,35 +8,69 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import com.reaksmeyarun.music_app.core.csv.LifecycleObserver
+import com.reaksmeyarun.music_app.core.csv.ObserveEvent
+import com.reaksmeyarun.music_app.core.csv.TransparentSystemBars
 import com.reaksmeyarun.music_app.core.csv.checkPermissionStatus
 import com.reaksmeyarun.music_app.core.csv.notificationPermission
+import com.reaksmeyarun.music_app.core.csv.openAppSettings
 import com.reaksmeyarun.music_app.core.csv.readMediaAudioPermission
+import com.reaksmeyarun.music_app.core.csv.requestPermission
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun PermissionRoute(
+    navigateToSettingScreen: () -> Unit,
     viewModel: PermissionViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val state = viewModel.state.collectAsState().value
-    CheckRuntimePermission(context, viewModel::onEvent)
-    PermissionScreen(
+    TransparentSystemBars(useDarkIcons = false)
+    ObserveEvent(
         context = context,
-        state = state,
         event = viewModel.event,
-        onEvent = viewModel::onEvent
+        navigateToSettingScreen = navigateToSettingScreen
     )
+    CheckPermission(context = context, onEvent = viewModel::onEvent)
+    PermissionScreen(state = state, onEvent = viewModel::onEvent)
 }
 
 @Composable
-fun CheckRuntimePermission(context: Context, onEvent: (PermissionEvent) -> Unit) {
-    LifecycleObserver(context) {
-        if (it == Lifecycle.Event.ON_RESUME) {
+fun CheckPermission(
+    context: Context,
+    onEvent: (PermissionEvent) -> Unit
+) {
+    LifecycleObserver(context) { lifeCycleEvent ->
+        if (lifeCycleEvent == Lifecycle.Event.ON_RESUME) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 val status = context.checkPermissionStatus(notificationPermission)
-                onEvent(PermissionEvent.CheckNotificationPermission(status))
+                onEvent(PermissionEvent.UpdateNotificationPermission(status))
             }
             val status = context.checkPermissionStatus(readMediaAudioPermission)
-            onEvent(PermissionEvent.CheckReadStoragePermission(status))
+            onEvent(PermissionEvent.UpdateReadMediaPermission(status))
         }
     }
+}
+
+@Composable
+private fun ObserveEvent(
+    context: Context,
+    event: Flow<PermissionViewModel.Event>,
+    navigateToSettingScreen: () -> Unit,
+) {
+    ObserveEvent(
+        flow = event,
+        onEvent = {
+            when (it) {
+                PermissionViewModel.Event.GoToSetting -> context.openAppSettings()
+                PermissionViewModel.Event.RequestReadStorage ->
+                    context.requestPermission(readMediaAudioPermission)
+
+                PermissionViewModel.Event.RequestNotification ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                        context.requestPermission(notificationPermission)
+
+                PermissionViewModel.Event.NavigateToSettingScreen -> navigateToSettingScreen.invoke()
+            }
+        }
+    )
 }

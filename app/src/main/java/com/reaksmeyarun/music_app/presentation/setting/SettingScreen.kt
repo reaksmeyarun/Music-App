@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Surface
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,8 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.reaksmeyarun.music_app.R
 import com.reaksmeyarun.music_app.core.csv.painter
-import com.reaksmeyarun.music_app.core.presentation.component.HeaderText
 import com.reaksmeyarun.music_app.core.presentation.component.Toolbar
+import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text.Header5TextModifier
 import com.reaksmeyarun.music_app.ui.theme.MusicAppTheme
 
 @Preview(showBackground = true)
@@ -50,14 +50,15 @@ fun SettingScreen() {
                 )
             }
         ) {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
-                HeaderText(
+                TextComponent(
                     text = stringResource(R.string.language),
-                    color = Color.White,
+                    textModifier = Header5TextModifier(),
                     modifier = Modifier.padding(horizontal = 24.dp)
                 )
                 Spacer(modifier = Modifier.height(16.dp))

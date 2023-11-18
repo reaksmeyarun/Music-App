@@ -4,9 +4,9 @@ import com.reaksmeyarun.music_app.core.csv.EPermissionStatus
 
 sealed class PermissionEvent {
 
-    data class CheckNotificationPermission(val status: EPermissionStatus) : PermissionEvent()
+    data class UpdateNotificationPermission(val status: EPermissionStatus) : PermissionEvent()
 
-    data class CheckReadStoragePermission(val status: EPermissionStatus) : PermissionEvent()
+    data class UpdateReadMediaPermission(val status: EPermissionStatus) : PermissionEvent()
 
     object RequestNotificationPermission : PermissionEvent()
 
