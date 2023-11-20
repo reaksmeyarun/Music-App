@@ -70,19 +70,19 @@ internal fun PermissionScreen(
                 Spacer(modifier = Modifier.height(36.dp))
                 TextComponent(
                     text = stringResource(R.string.note),
-                    textModifier = Header5TextModifier(),
-                    modifier = Modifier.padding(horizontal = 24.dp)
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    textModifier = Header5TextModifier()
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextComponent(
                     text = permissionNoteDescription(),
-                    textModifier = Header1TextModifier()
-                        .fontWeight(FontWeight.W300),
                     modifier = Modifier.padding(
                         start = 24.dp,
                         end = 24.dp,
                         bottom = 32.dp
-                    )
+                    ),
+                    textModifier = Header1TextModifier()
+                        .fontWeight(FontWeight.W300)
                 )
             }
         }

@@ -72,7 +72,7 @@ open class TextModifier {
         this.isSelected = isSelected
     }
 
-    fun style(style: TextStyle) = this.apply {
+    fun style(style: TextStyle?) = this.apply {
         this.style = style
     }
 
