@@ -48,6 +48,5 @@ fun PreviewComponentButton() {
         "Button Component",
         buttonModifier = ButtonModifier()
             .buttonColors(Color.Red)
-            .textColor(Color.White)
     )
 }

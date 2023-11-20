@@ -87,7 +87,6 @@ fun ConfirmDialog(
                     TextComponent(
                         text = desc,
                         textModifier = SmallTextModifier()
-                            .color(Color.White)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
@@ -97,7 +96,6 @@ fun ConfirmDialog(
                         ButtonComponent(
                             value = textCancel,
                             buttonModifier = ButtonModifier()
-                                .textColor(Color.White)
                                 .buttonColors(Color.Transparent)
                                 .contentPaddingHorizontal(8.dp),
                             onClick = {
@@ -108,7 +106,6 @@ fun ConfirmDialog(
                         ButtonComponent(
                             value = textConfirm,
                             buttonModifier = ButtonModifier()
-                                .textColor(Color.White)
                                 .buttonColors(Color.Transparent)
                                 .contentPaddingHorizontal(8.dp),
                             onClick = {
