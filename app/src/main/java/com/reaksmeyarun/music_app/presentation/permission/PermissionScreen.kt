@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
@@ -22,6 +26,10 @@ import com.reaksmeyarun.music_app.core.csv.permissionNoteDescription
 import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
 import com.reaksmeyarun.music_app.core.presentation.component.text.Header1TextModifier
 import com.reaksmeyarun.music_app.core.presentation.component.text.Header5TextModifier
+import com.reaksmeyarun.music_app.core.presentation.component.text_field.BasicTextFieldComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text_field.OutlinedTextFieldComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text_field.TextFieldComponent
+import com.reaksmeyarun.music_app.core.presentation.component.text_field.model.TextFieldModifier
 import com.reaksmeyarun.music_app.presentation.permission.component.ComponentPermission
 import com.reaksmeyarun.music_app.presentation.permission.component.ComponentTopAppBar
 import com.reaksmeyarun.music_app.presentation.permission.component.RationaleDialog
@@ -83,6 +91,31 @@ internal fun PermissionScreen(
                     ),
                     textModifier = Header1TextModifier()
                         .fontWeight(FontWeight.W300)
+                )
+                var string = remember {
+                    mutableStateOf("")
+                }
+                OutlinedTextFieldComponent(
+                    value = string.value,
+                    placeholder = "What is this?",
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    trialingClick = {
+
+                    },
+                    onValueChange = {
+                        string.value = it
+                    }
+                )
+                OutlinedTextFieldComponent(
+                    value = string.value,
+                    placeholder = "What is this?",
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    trialingClick = {
+
+                    },
+                    onValueChange = {
+                        string.value = it
+                    }
                 )
             }
         }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.tooling.preview.Preview
 import com.reaksmeyarun.music_app.core.presentation.component.text.TextComponent
 
 @Composable
@@ -29,4 +30,16 @@ fun CheckBox(
         )
         TextComponent(text = text)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewCheckBox() {
+    CheckBox(
+        text = "CheckBox",
+        checked = true,
+        onCheckedChange = {
+
+        }
+    )
 }

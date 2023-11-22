@@ -1,5 +1,6 @@
-package com.reaksmeyarun.music_app.core.presentation.component.edit_text
+package com.reaksmeyarun.music_app.core.presentation.component.text_field.model
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.graphics.Color
@@ -12,11 +13,30 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.reaksmeyarun.music_app.ui.theme.Primary
 import com.reaksmeyarun.music_app.ui.theme.TextColor
 
-open class TextFieldModifier {
+class TextFieldModifier {
 
+    @DrawableRes
+    var leadingRes: Int = -1
+        private set
+    @DrawableRes
+    var trailingRes: Int = -1
+        private set
     var visualTransformation: VisualTransformation = VisualTransformation.None
+        private set
+    var backgroundColor: Color = Primary
+        private set
+    var focusedBorderColor: Color = Primary
+        private set
+    var unfocusedBorderColor: Color = Primary.copy(0.5f)
+        private set
+    var focusedLabelColor: Color = Primary
+        private set
+    var unfocusedLabelColor: Color = Primary.copy(0.5f)
+        private set
+    var unfocusedIndicatorColor: Color = Primary.copy(0.5f)
         private set
     var focusedContainerColor: Color = Color.Transparent
         private set
@@ -24,15 +44,13 @@ open class TextFieldModifier {
         private set
     var disabledContainerColor: Color = Color.Transparent
         private set
-    var focusedIndicatorColor: Color = Color.Transparent
-        private set
-    var unfocusedIndicatorColor: Color = Color.Transparent
-        private set
     var fontWeight: FontWeight = FontWeight.W300
         private set
     var textSize: TextUnit = 13.sp
         private set
     var maxLines: Int = Int.MAX_VALUE
+        private set
+    var maxLength: Int = Int.MAX_VALUE
         private set
     var minLines: Int = 1
         private set
@@ -55,13 +73,17 @@ open class TextFieldModifier {
         private set
     var isError: Boolean = false
         private set
-    var placeHolderColor: Color = TextColor.copy(0.5f)
+    var unfocusedPlaceHolderColor: Color = TextColor.copy(0.5f)
+        private set
+    var focusedPlaceHolderColor: Color = TextColor.copy(0.5f)
         private set
     var errorMessage: String = ""
         private set
     var errorColor: Color = Color.Red
         private set
     var singleLine: Boolean = false
+        private set
+    var keyboardType: KeyboardType = KeyboardType.Text
         private set
     var keyboardOptions: KeyboardOptions? = null
         private set
@@ -77,10 +99,15 @@ open class TextFieldModifier {
         private set
     var contentPaddingEnd: Dp = 0.dp
         private set
-    var contentPaddingTop: Dp = 16.dp
+    var contentPaddingTop: Dp = 8.dp
         private set
-    var contentPaddingBottom: Dp = 16.dp
+    var contentPaddingBottom: Dp = 8.dp
         private set
+    var focusedIndicatorColor: Color = Color.Transparent
+        private set
+    var disabledIndicatorColor: Color = Color.Transparent
+        private set
+
 
     fun contentPadding(
         start: Dp = contentPaddingStart,
@@ -97,12 +124,16 @@ open class TextFieldModifier {
     fun contentPadding(
         vertical: Dp = contentPaddingTop,
         horizontal: Dp = contentPaddingStart
-    ) = this.apply {
-        this.contentPaddingStart = horizontal
-        this.contentPaddingEnd = horizontal
-        this.contentPaddingTop = vertical
-        this.contentPaddingBottom = vertical
-    }
+    ) = contentPadding(
+        start = horizontal,
+        top = vertical,
+        end = horizontal,
+        bottom = vertical
+    )
+
+    fun contentPadding(
+        dp: Dp = contentPaddingTop
+    ) = contentPadding(dp, dp)
 
     fun suffix(suffix: String) = this.apply {
         this.suffix = suffix
@@ -113,7 +144,7 @@ open class TextFieldModifier {
     }
 
     fun prefixColor(color: Color) = this.apply {
-        this.prefixColor = prefixColor
+        this.prefixColor = color
     }
 
     fun isError(status: Boolean) = this.apply {
@@ -126,6 +157,14 @@ open class TextFieldModifier {
         this.enabled = status
     }
 
+    fun leadingRes(@DrawableRes res: Int) = this.apply {
+        this.leadingRes = res
+    }
+
+    fun trailingRes(@DrawableRes res: Int) = this.apply {
+        this.trailingRes = res
+    }
+
     fun readOnly(status: Boolean) = this.apply {
         this.readOnly = status
     }
@@ -134,12 +173,36 @@ open class TextFieldModifier {
         this.visualTransformation = visualTransformation
     }
 
+    fun focusedContainerColor(color: Color) = this.apply {
+        this.focusedContainerColor = color
+    }
+
+    fun unfocusedLabelColor(color: Color) = this.apply {
+        this.unfocusedLabelColor = color
+    }
+
+    fun focusedLabelColor(color: Color) = this.apply {
+        this.focusedLabelColor = color
+    }
+
+    fun unfocusedBorderColor(color: Color) = this.apply {
+        this.unfocusedBorderColor = color
+    }
+
+    fun backgroundColor(color: Color) = this.apply {
+        this.backgroundColor = color
+    }
+
     fun focusedIndicatorColor(color: Color) = this.apply {
         this.focusedIndicatorColor = color
     }
 
-    fun focusedContainerColor(color: Color) = this.apply {
-        this.focusedContainerColor = color
+    fun unfocusedIndicatorColor(color: Color) = this.apply {
+        this.unfocusedIndicatorColor = color
+    }
+
+    fun focusedBorderColor(color: Color) = this.apply {
+        this.focusedBorderColor = color
     }
 
     fun unfocusedContainerColor(color: Color) = this.apply {
@@ -148,10 +211,6 @@ open class TextFieldModifier {
 
     fun disabledContainerColor(color: Color) = this.apply {
         this.disabledContainerColor = color
-    }
-
-    fun unfocusedIndicatorColor(color: Color) = this.apply {
-        this.unfocusedIndicatorColor = color
     }
 
     fun color(color: Color) = this.apply {
@@ -166,9 +225,13 @@ open class TextFieldModifier {
         this.textSize = textSize
     }
 
-    open fun maxLines(maxLines: Int) = this.apply {
+    fun maxLines(maxLines: Int) = this.apply {
         this.singleLine = maxLines == 1
         this.maxLines = maxLines
+    }
+
+    fun maxLength(maxLength: Int) = this.apply {
+        this.maxLength = maxLength
     }
 
     fun minLines(minLines: Int) = this.apply {
@@ -200,6 +263,12 @@ open class TextFieldModifier {
     }
 
     fun keyboardType(keyboardType: KeyboardType) = this.apply {
+        this.keyboardType = keyboardType
+        this.keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType)
+    }
+
+    fun keyboardOptions(keyboardType: KeyboardType) = this.apply {
+        this.keyboardType = keyboardType
         this.keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType)
     }
 
@@ -207,8 +276,12 @@ open class TextFieldModifier {
         this.keyboardActions = keyboardActions
     }
 
-    fun placeHolderColor(color: Color) = this.apply {
-        this.placeHolderColor = color
+    fun unfocusedPlaceHolderColor(color: Color) = this.apply {
+        this.unfocusedPlaceHolderColor = color
+    }
+
+    fun focusedPlaceHolderColor(color: Color) = this.apply {
+        this.focusedPlaceHolderColor = color
     }
 
     fun errorMessage(errorMessage: String) = this.apply {
@@ -228,6 +301,10 @@ open class TextFieldModifier {
             Int.MAX_VALUE
         maxLines(maxLines)
         this.singleLine = status
+    }
+
+    fun disabledIndicatorColor(color: Color) = this.apply {
+        this.disabledIndicatorColor = color
     }
 
 }

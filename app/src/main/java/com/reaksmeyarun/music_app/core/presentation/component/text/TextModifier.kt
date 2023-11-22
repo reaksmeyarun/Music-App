@@ -79,6 +79,7 @@ open class TextModifier {
 }
 
 class SmallTextModifier : TextModifier() {
+
     init {
         textSize(12.sp)
     }
